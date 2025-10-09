@@ -41,7 +41,7 @@ helm install myapp-poc ./myapp -f myapp/values-dev.yaml -n default
 #### Base Environment
 ```bash
 helm upgrade myapp-poc ./myapp
-helm upgrade --install myapp-poc ./myapp -n default --reuse-values
+helm upgrade --install myapp-poc ./myapp -n default
 ```
 
 #### Development Environment
@@ -82,4 +82,16 @@ kubectl exec myapp-poc-postgresql-0 -- bash -c "PGPASSWORD=kpc2018 psql -U postg
 #### สร้าง database mydb
 ```bash
 kubectl exec myapp-poc-postgresql-0 -- bash -c "PGPASSWORD=kpc2018 psql -U postgres -c 'CREATE DATABASE mydb OWNER kongdev;'"
+```
+
+
+#### ทดสอบ node + pg (local)
+```bash
+docker build -t poc-helm-node-pg:v1.1.0 .
+docker run -p 3003:3000 poc-helm-node-pg:v1.1.0
+```
+
+#### Load Docker image เข้า minikube
+```bash
+minikube image load poc-helm-node-pg:v1.1.0
 ```
