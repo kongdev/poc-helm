@@ -15,7 +15,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 config:
-  myvalue: "Hello from BASE environment"
+  myvalue: "Hello from BASE environment with PostgreSQL + Secret!"
 
 serviceAccount:
   create: true
@@ -31,6 +31,28 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 80
+
+# PostgreSQL configuration (Bitnami dependency)
+postgresql:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: bitnamilegacy/postgresql
+    tag: 17.6.0
+    pullPolicy: IfNotPresent
+  auth:
+    existingSecret: myapp-db-secret
+    secretKeys:
+      usernameKey: postgres-user
+      userPasswordKey: postgres-password
+      adminPasswordKey: postgres-password
+      databaseKey: postgres-database
+  primary:
+    persistence:
+      enabled: false
+  global:
+    security:
+      allowInsecureImages: true
 
 resources: {}
 nodeSelector: {}

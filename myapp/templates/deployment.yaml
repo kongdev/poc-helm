@@ -32,11 +32,36 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            # ตัวอย่างค่า config ปกติ
             - name: MY_VALUE
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "myapp.fullname" . }}-config
                   key: myvalue
+            # PostgreSQL connection info
+            - name: POSTGRES_HOST
+              value: {{ printf "%s-postgresql" .Release.Name | quote }}
+
+            - name: POSTGRES_PORT
+              value: "5432"
+
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: myapp-db-secret
+                  key: postgres-user
+
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: myapp-db-secret
+                  key: postgres-password
+                  
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: myapp-db-secret
+                  key: postgres-database
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
