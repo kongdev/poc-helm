@@ -36,9 +36,26 @@ helm install myapp-poc ./myapp -f myapp/values-dev.yaml -n default
 helm install myapp-poc ./myapp -f myapp/values-uat.yaml -n default
 ```
 
+### การ Upgrade
+
+#### Base Environment
+```bash
+helm upgrade myapp-poc ./myapp
+```
+
+#### Development Environment
+```bash
+helm upgrade myapp-poc ./myapp -f myapp/values-dev.yaml
+```
+
+#### UAT Environment
+```bash
+helm upgrade myapp-poc ./myapp -f myapp/values-uat.yaml
+```
+
 ### การ ลบ deploy
 ```bash
-helm uninstall myapp-poc -n default
+helm uninstall myapp-poc
 ```
 
 ### ค่า Configuration แต่ละ Environment
