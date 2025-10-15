@@ -1,7 +1,5 @@
 # MyApp Helm Chart
 
-## การใช้งาน Helm Chart สำหรับแต่ละ Environment
-
 ### คำสั่ง Dry Run และ Debug
 
 #### Base Environment (values.yaml)
@@ -14,10 +12,6 @@ helm install myapp-poc ./myapp --dry-run --debug
 helm install myapp-poc ./myapp -f myapp/values-dev.yaml --dry-run --debug
 ```
 
-#### UAT Environment
-```bash
-helm install myapp-poc ./myapp -f myapp/values-uat.yaml --dry-run --debug
-```
 
 ### การ Deploy จริง
 
@@ -33,20 +27,21 @@ helm uninstall myapp-poc
 
 #### Development Environment
 ```bash
-helm install myapp-poc ./myapp -f myapp/values-dev.yaml -n default
+helm install myapp-poc ./myapp -f myapp/values.yaml -n default
 ```
 
 ### การ Upgrade
 
 #### Base Environment
 ```bash
-helm upgrade myapp-poc ./myapp
-helm upgrade --install myapp-poc ./myapp -n default
+helm diff upgrade -n default myapp-poc ./myapp -f myapp/values.yaml
+helm upgrade -n default myapp-poc ./myapp -f values.yaml
+helm upgrade -n default --install myapp-poc ./myapp -f values.yaml
 ```
 
 #### Development Environment
 ```bash
-helm upgrade myapp-poc ./myapp -f myapp/values-dev.yaml
+helm upgrade myapp-poc ./myapp -f myapp/values.yaml
 ```
 
 
@@ -54,8 +49,7 @@ helm upgrade myapp-poc ./myapp -f myapp/values-dev.yaml
 ```bash
 kubectl create secret generic myapp-db-secret \
   --from-literal=postgres-password=kpc2018 \
-  --from-literal=postgres-user=kongdev \
-  --from-literal=postgres-database=mydb \
+  --from-literal=postgres-app-password=kpc2018 \
   -n default
 ```
 
@@ -69,22 +63,6 @@ kubectl get secret myapp-db-secret -o yaml
 kubectl delete secrets myapp-db-secret
 ```
 
-#### ทดสอบ เชื่อมต่อ postgresql จาก secret ที่สร้าง (ยังเชื่อมต่อไม่ได้หรอก)
-```bash
-kubectl exec -it myapp-poc-postgresql-0 -- psql -U kongdev -d mydb
-```
-
-#### สร้าง user kongdev ก่อน
-```bash
-kubectl exec myapp-poc-postgresql-0 -- bash -c "PGPASSWORD=kpc2018 psql -U postgres -c \"CREATE USER kongdev WITH PASSWORD 'kpc2018';\""
-```
-
-#### สร้าง database mydb
-```bash
-kubectl exec myapp-poc-postgresql-0 -- bash -c "PGPASSWORD=kpc2018 psql -U postgres -c 'CREATE DATABASE mydb OWNER kongdev;'"
-```
-
-
 #### ทดสอบ node + pg (local)
 ```bash
 docker build -t poc-helm-node-pg:v1.1.0 .
@@ -94,4 +72,9 @@ docker run -p 3003:3000 poc-helm-node-pg:v1.1.0
 #### Load Docker image เข้า minikube
 ```bash
 minikube image load poc-helm-node-pg:v1.1.0
+```
+
+#### เช็ค images ใน minikube
+```bash
+minikube image ls
 ```

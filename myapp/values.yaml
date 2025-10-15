@@ -2,6 +2,20 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+global:
+  postgresql:
+    auth:
+      existingSecret: myapp-db-secret
+      username: "appuser"
+      database: "mydb"
+      password: "nopass"
+      secretKeys:
+        adminPasswordKey: postgres-password
+        userPasswordKey: postgres-app-password
+        replicationPasswordKey: postgres-password
+  security:
+    allowInsecureImages: true
+
 replicaCount: 1
 
 image:
@@ -15,7 +29,7 @@ nameOverride: ""
 fullnameOverride: ""
 
 config:
-  myvalue: "Hello from BASE environment with PostgreSQL + Secret + node22"
+  myvalue: "Hello from BASE environment with PostgreSQL + Secret + node22-alpine"
 
 serviceAccount:
   create: true
@@ -39,20 +53,10 @@ postgresql:
     registry: docker.io
     repository: bitnamilegacy/postgresql
     tag: 17.6.0
-    pullPolicy: IfNotPresent
-  auth:
-    existingSecret: myapp-db-secret
-    secretKeys:
-      usernameKey: postgres-user
-      userPasswordKey: postgres-password
-      adminPasswordKey: postgres-password
-      databaseKey: postgres-database
+    pullPolicy: Always
   primary:
     persistence:
       enabled: false
-  global:
-    security:
-      allowInsecureImages: true
 
 resources: {}
 nodeSelector: {}
@@ -71,3 +75,7 @@ ingress:
 
 autoscaling:
   enabled: false
+# imageFrontend:
+#   repository: nginx
+#   tag: "latest"
+#   pullPolicy: Always
