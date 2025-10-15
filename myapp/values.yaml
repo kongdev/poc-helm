@@ -75,7 +75,14 @@ ingress:
 
 autoscaling:
   enabled: false
-# imageFrontend:
-#   repository: nginx
-#   tag: "latest"
-#   pullPolicy: Always
+
+frontend:
+  image:
+    repository: nginx
+    tag: "latest"
+    pullPolicy: Always
+  replicaCount: 1
+  resources: {}
+  service:
+    type: ClusterIP
+    port: 80
