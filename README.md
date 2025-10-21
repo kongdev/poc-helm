@@ -25,18 +25,14 @@ helm install myapp-poc ./myapp -n default
 helm uninstall myapp-poc
 ```
 
-#### Development Environment
-```bash
-helm install myapp-poc ./myapp -f myapp/values.yaml -n default
-```
+
 
 ### การ Upgrade
 
 #### Base Environment
 ```bash
-helm diff upgrade -n default myapp-poc ./myapp -f myapp/values.yaml
-helm upgrade -n default myapp-poc ./myapp -f values.yaml
-helm upgrade -n default --install myapp-poc ./myapp -f values.yaml
+helm diff upgrade  myapp-poc ./myapp -f myapp/values.yaml -n default
+helm upgrade --install myapp-poc ./myapp -f values.yaml -n default
 ```
 
 #### Development Environment
