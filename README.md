@@ -2,22 +2,16 @@
 
 ### คำสั่ง Dry Run และ Debug
 
-#### Base Environment (values.yaml)
+
+### การ debug template
 ```bash
-helm install myapp-poc ./myapp --dry-run --debug
+helm template myapp-poc ./myapp -f myapp/values-dev.yaml -n default --dry-run --debug
 ```
 
-#### Development Environment
+### การ Upgrade
+
 ```bash
-helm install myapp-poc ./myapp -f myapp/values-dev.yaml --dry-run --debug
-```
-
-
-### การ Deploy จริง
-
-#### Base Environment
-```bash
-helm install myapp-poc ./myapp -n default
+helm upgrade --install myapp-poc ./myapp -f values.yaml -n default
 ```
 
 ### การ ลบ deploy
@@ -25,21 +19,10 @@ helm install myapp-poc ./myapp -n default
 helm uninstall myapp-poc
 ```
 
-
-
-### การ Upgrade
-
-#### Base Environment
+### การ diff helm
 ```bash
 helm diff upgrade  myapp-poc ./myapp -f myapp/values.yaml -n default
-helm upgrade --install myapp-poc ./myapp -f values.yaml -n default
 ```
-
-#### Development Environment
-```bash
-helm upgrade myapp-poc ./myapp -f myapp/values.yaml
-```
-
 
 #### สร้าง Secret ของเราเอง (ใช้ก่อน install)
 ```bash
